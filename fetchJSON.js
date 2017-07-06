@@ -1,5 +1,5 @@
 /**@function fetchJSON
-*@brief use the Fetch API to retrieve data from a JSON file
+*use the Fetch API to retrieve data from a JSON file
 *@param {string} path - the complete path to the file
 *@param {function} functor - the function to which the JSON data will be passed
 *
@@ -17,6 +17,8 @@ function fetchJSON(path, functor){
                 return null;
             }
         });
-    else
+    else{
         console.error("fetchJSON.js : The second argument must be a function");
+        return null;
+    }
 }
