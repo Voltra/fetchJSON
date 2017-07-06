@@ -18,7 +18,7 @@ function fetchJSON(path, functor){
             }
         });
     else{
-        console.error("fetchJSON.js : The second argument must be a function");
+        console.error("fetchJSON.js : The first argument must be a string, the second argument must be a function");
         return null;
     }
 }
