@@ -6,19 +6,24 @@
 *@return the Promise object of the fetch request
 */
 function fetchJSON(path, functor){
-    if(  (typeof functor === typeof (x=>x)) && (typeof path === typeof "42xyz")  )
+    if(  (typeof functor == typeof (x=>x)) && (typeof path == typeof "42xyz")  )
         return fetch(path).then((response)=>{
             var contentType= response.headers.get("content-type");
             
             if(contentType && contentType.includes("application/json"))
                 return response.json().then( jsonData=>functor(jsonData) );
             else{
-                console.error("fetchJSON.js : Something went wrong during data inspection (data is not JSON or data is unreachable)");
+                //console.error("fetchJSON.js : Something went wrong during data inspection (data is not JSON or file is unreachable)");
+                throw new Error("Something went wrong during data inspection (data is not JSON or couldn't reach file)");
                 return null;
             }
         });
     else{
-        console.error("fetchJSON.js : The first argument must be a string, the second argument must be a function");
+        //console.error("fetchJSON.js : The first argument must be a string, the second argument must be a function");
+        if(typeof path != typeof "42xyz")
+            throw new TypeError("The 1st argument must be a string");
+        if(typeof functor != typeof (x=>x))
+            throw new TypeError("The 2nd argument must be a function");
         return null;
     }
 }
