@@ -6,8 +6,10 @@
 *@return the Promise object of the fetch request
 */
 function fetchJSON(path, functor){
-    if(  (typeof functor == typeof (x=>x)) && (typeof path == typeof "42xyz")  )
-        return fetch(path).then((response)=>{
+    if(  (typeof functor == typeof (x=>x)) && (typeof path == typeof "42xyz")  ){
+        const f = fetch(path);
+        
+        f.then((response)=>{
             var contentType= response.headers.get("content-type");
             
             if(contentType && contentType.includes("application/json"))
@@ -18,6 +20,9 @@ function fetchJSON(path, functor){
                 return null;
             }
         });
+        
+        return f;
+    }
     else{
         //console.error("fetchJSON.js : The first argument must be a string, the second argument must be a function");
         if(typeof path != typeof "42xyz")
