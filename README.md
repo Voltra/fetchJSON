@@ -85,7 +85,7 @@ fetchJSON("../../someFolder/someFile.json", data=>config_data=data)
 .then(/*some manipulations*/)
 .then(/*some manipulations*/)
 .catch(errorMsg=>{
-  /*hande errors here*/
+  /*handle errors here*/
 });
 
 //without fetchJSON
@@ -107,7 +107,7 @@ new Promise((resolve, reject)=>{
 .then(/*some manipulations*/)
 .then(/*some manipulations*/)
 .catch(errorMsg=>{
-  /*hande errors here*/
+  /*handle errors here*/
 });
 ```
 From version 1.0.5, fetchJSON is completely thenable and catchable just like any other good Promise-based library \o/ !
