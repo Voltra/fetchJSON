@@ -54,7 +54,7 @@ fetch("../../someFolder/someFile.json").then(response=>{
 	if(/*there's json in there*/)
 		return response.json().then(data=>{
 			/*some manipulation*/
-			let config_data = data;
+			config_data = data;
 			//finally !
 		});
 	else
@@ -96,7 +96,7 @@ new Promise((resolve, reject)=>{
         if(/*there's json in there*/)
         	return response.json().then(data=>{
         		/*some manipulation*/
-        		let config_data = data;
+        		config_data = data;
         		//finally !
         		resolve(data);//important
         	});
