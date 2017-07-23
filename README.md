@@ -115,7 +115,7 @@ From version 1.0.5, fetchJSON is completely thenable and catchable just like any
 ## Motivations ##
 As you can see, fetchJSON really focuses on what's important : using the data. Whereas the regular fetch approach is mostly boilerplate and takes up a lot of space in your code, and most of that space is here solely to get the data not using it.
 
-JSON is a precious ressource, it would be a shame to spend more time on getting its data than using it.
+JSON is a precious resource, it would be a shame to spend more time on getting its data than using it.
 
 ## Questions/Suggestions ##
 Please fill free to ask for help or post suggestions on my github repository, I'll be more than glad to take care of your problems/concerns.
