@@ -18,14 +18,18 @@
 })(this, function(){
     return function(path, functor){
         return new Promise((resolve, reject)=>{
-            if(  (typeof functor == typeof (x=>x)) && (typeof path == typeof "42xyz")  ){
+            if(typeof path == typeof "42xyz"){
                 const f = fetch(path);
 
                 f.then((response)=>{
                     var contentType= response.headers.get("content-type");
 
                     if(contentType && contentType.includes("application/json"))
-                        return response.json().then( jsonData=>{functor(jsonData); resolve(jsonData);} );
+                        return response.json().then(jsonData=>{
+                            if(typeof functor == "function")
+                                functor(jsonData);
+                            resolve(jsonData);
+                        });
                     else{
                         //throw new Error("Something went wrong during data inspection (data is not JSON or couldn't reach file)");
                         reject("Something went wrong during data inspection (data is not JSON or couldn't reach file)");
@@ -40,8 +44,6 @@
                 if(typeof path != typeof "42xyz")
                     //throw new TypeError("The 1st argument must be a string");
                     reject("The 1st argument must be a string");
-                if(typeof functor != typeof (x=>x))
-                    reject("The 2nd argument must be a function");
                 return null;
             }
         });

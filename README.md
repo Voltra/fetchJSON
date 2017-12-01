@@ -1,14 +1,12 @@
 # fetchJSON #
 A Javascript library that allows to abstract all boilerplate from retrieving JSON data using the native ES6 fetch API.
 
-
 ----------
 
 
 
 Simple and easy to use, it only abstracts away all the boilerplate required for fetching json data.
 No other javascript library is required to use this library.
-
 
 ----------
 ## Installation/Use ##
@@ -38,7 +36,16 @@ npm install fetch_json
 const fetchJSON = require("fetch_json");
 ```
 
+
+
+***With NPM and Babel***
+
+`npm install fetch_json`
+
+`import fetchJSON from "fetch_json"`
+
 ## Simple use case ##
+
 Sometimes, you just have that json file which's sole purpose is configuration.
 With fetchJSON, getting the data from this file is very easy:
 
@@ -119,3 +126,21 @@ JSON is a precious resource, it would be a shame to spend more time on getting i
 
 ## Questions/Suggestions ##
 Please fill free to ask for help or post suggestions on my github repository, I'll be more than glad to take care of your problems/concerns.
+
+#Hot updates
+
+### A bit more Promise style
+
+Since v1.10 you can use full Promise style to fetch your data :
+
+```javascript
+let data = null;
+fetchJSON("/path/to/file/dot.json")
+.then(json => data=json);
+
+//Is strictly equivalent to
+
+let data = null;
+fetchJSON("/path/to/file/dot.json", json => data=json);
+```
+
