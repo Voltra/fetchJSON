@@ -52,7 +52,7 @@ With fetchJSON, getting the data from this file is very easy:
 ```javascript
 //With fetchJSON
 let config_data;
-fetchJSON("../../someFolder/someFile.json", data=>config_data=data);
+fetchJSON("../../someFolder/someFile.json").then(data=>config_data=data);
 
 //Without fetchJSON
 let config_data;
@@ -72,10 +72,8 @@ fetch("../../someFolder/someFile.json").then(response=>{
 
 Once loaded, the data can be used like this: 
 ```javascript
-let config_data;
-fetchJSON("../../someFolder/someFile.json", data=>config_data=data)
-.then(()=>{
-	/* use config_data to configure your application*/
+fetchJSON("../../someFolder/someFile.json").then(config_data=>{
+	/* use data to configure your application*/
 });
 ```
 
@@ -87,8 +85,7 @@ Version 1.0.5 (NPM, it's 1.05 on github) brings a whole new layer of abstracted 
 
 ```javascript
 //with fetchJSON
-let config_data;
-fetchJSON("../../someFolder/someFile.json", data=>config_data=data)
+fetchJSON("../../someFolder/someFile.json")
 .then(/*some manipulations*/)
 .then(/*some manipulations*/)
 .catch(errorMsg=>{
@@ -96,14 +93,12 @@ fetchJSON("../../someFolder/someFile.json", data=>config_data=data)
 });
 
 //without fetchJSON
-let config_data;
 new Promise((resolve, reject)=>{
   fetch("../../someFolder/someFile.json").then(response=>{
         /*gather headers*/
         if(/*there's json in there*/)
         	return response.json().then(data=>{
         		/*some manipulation*/
-        		config_data = data;
         		//finally !
         		resolve(data);//important
         	});
@@ -142,5 +137,66 @@ fetchJSON("/path/to/file/dot.json")
 
 let data = null;
 fetchJSON("/path/to/file/dot.json", json => data=json);
+```
+
+
+
+## Complete 180°
+
+Since v2.0.0 the second argument, which was a callback function (same behavior as a simple `then`), has been changed to an object of data :
+
+This object of data must be:
+
+* Not provided (defaulted to `{}`)
+* an empty object
+* an object of numbers and/or strings
+* an object of numbers and/or strings and/or arrays (that only contains numbers and/or strings)
+
+
+
+This allows you to construct the query string easily :
+
+```javascript
+fetchJSON("/api/user", {
+    id: 42,
+    item: "player_profile"
+    props: [
+        "rank",
+        "ratio"
+    ]
+}); //Will conduct a GET request to /api/user?id=42&item=player_profile&props=rank&props=ratio
+
+///OR
+
+fetchJSON("/api/user?", {
+    id: 42,
+    item: "player_profile"
+    props: [
+        "rank",
+        "ratio"
+    ]
+}); //Will conduct a GET request to /api/user?id=42&item=player_profile&props=rank&props=ratio
+
+///OR
+
+fetchJSON("/api/user?test=1", {
+    id: 42,
+    item: "player_profile"
+    props: [
+        "rank",
+        "ratio"
+    ]
+}); //Will conduct a GET request to /api/user?test=1&id=42&item=player_profile&props=rank&props=ratio
+
+///OR
+
+fetchJSON("/api/user?test=1&", {
+    id: 42,
+    item: "player_profile"
+    props: [
+        "rank",
+        "ratio"
+    ]
+}); //Will conduct a GET request to /api/user?test=1&id=42&item=player_profile&props=rank&props=ratio
 ```
 
