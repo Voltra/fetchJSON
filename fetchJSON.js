@@ -1,13 +1,14 @@
 /**@function fetchJSON
 *use the Fetch API to retrieve data from a JSON file
 *@param {string} path - the complete path to the file
-*@param {object} data - an object of data to be converted into a query string
+*@param {object|undefined} data - an object of data to be converted into a query string
+*@param {object|undefined} options - the options for fetch
 *
 *@return the Promise object of the fetch request
 */
 
 (function UniversalModuleDefinition(root, factory){
-    if(typeof exports === 'object' && typeof module === 'object')
+    if(typeof module === 'object')
         module.exports = factory();
     else if(typeof define === 'function' && define.amd)
         define("fetchJSON", [], factory);
@@ -15,9 +16,10 @@
         exports["fetchJSON"] = factory();
     else
         root["fetchJSON"] = factory();
-})(this, function(){
-    return function(path, data){
-        data = data || {};
+})(window || this, function(){
+    var fetchJSON = function(path, data, options){
+        data = Object.assign({}, fetchJSON.defaults.qs, data || {});
+        options = options || {};
         
         if(typeof data != "object" || data === null)
             throw new TypeError("'data' must be an Object");
@@ -61,10 +63,12 @@
                 qstring = /&$/.test(path) ? qstring : "&"+qstring;
         }
         
-        return new Promise((resolve, reject)=>{
+        return new Promise(function(resolve, reject){
             if(typeof path == "string"){
 //                console.log("url: ", path+qstring);
-                var f = fetch(path + qstring);
+                var fetchOptions = Object.assign({}, fetchJSON.defaults.options, options, {method: "GET"});
+                fetchOptions.headers = Object.assign({}, fetchJSON.defaults.headers, fetchOptions.headers || {});
+                var f = fetch(path + qstring, fetchOptions);
 
                 f.then(function(response){
 //                    var contentType= response.headers.get("content-type");
@@ -96,5 +100,15 @@
                 return null;
             }
         });
-    }
+    };
+    
+    fetchJSON.defaults = {
+        qs: {},
+        options: {},
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+    
+    return fetchJSON;
 });

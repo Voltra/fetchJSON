@@ -200,3 +200,15 @@ fetchJSON("/api/user?test=1&", {
 }); //Will conduct a GET request to /api/user?test=1&id=42&item=player_profile&props=rank&props=ratio
 ```
 
+## Changes
+### v2.1.0
+
+In an effort to provide more customization, `fetchJSON` now exposes a third argument : `options`. This is an object following the same interface as `fetch`'s `init` [argument](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters), with the only enforcement being that headers come as an object and not an object or an array.
+
+
+
+It also exposes `fetchJSON.defaults` with three properties : `qs`, `options` and `headers` :
+
+* `qs` is merged w/ the `data` argument of `fetchJSON`
+* `headers` is merged w/ the `headers` property of the `options` argument of `fetchJSON`
+* `options` is merged w/ the `options` argument of `fetchJSON`
