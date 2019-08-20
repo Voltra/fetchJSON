@@ -201,6 +201,9 @@ fetchJSON("/api/user?test=1&", {
 ```
 
 ## Changes
+### v2.2.0
+In an effort to make the library as usable as possible, I refactored the options/query string/headers merging algorithm to use deep merging instead of shallow merging.
+
 ### v2.1.0
 
 In an effort to provide more customization, `fetchJSON` now exposes a third argument : `options`. This is an object following the same interface as `fetch`'s `init` [argument](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters), with the only enforcement being that headers come as an object and not an object or an array.

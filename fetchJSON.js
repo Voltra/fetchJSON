@@ -17,8 +17,54 @@
     else
         root["fetchJSON"] = factory();
 })(window || this, function(){
+    // cf. https://stackoverflow.com/a/34749873/7316365
+    /**
+     * Simple object check.
+     * @param item
+     * @returns {boolean}
+     */
+    function isObject(item) {
+      return (item && typeof item === 'object' && !(item instanceof Array));
+    }
+
+    /**
+     * Deep merge two objects.
+     * @param target
+     * @param ...sources
+     */
+    function mergeDeep(target/*, ...sources*/) {
+    //          if (!sources.length) return target;
+      if (arguments.length <=1)
+          return target;
+      var sources = [].slice.apply(arguments);
+        sources.shift(); //remove "target"
+      var source = sources.shift();
+
+      if (isObject(target) && isObject(source)) {
+        for (var key in source) {
+          if (isObject(source[key])) {
+            if (!target[key]){
+                var obj = {};
+                obj[key] = {};
+                Object.assign(target, obj);
+            }
+            mergeDeep(target[key], source[key]);
+          } else {
+            var obj = {};
+            obj[key] = source[key];
+            Object.assign(target, obj);
+          }
+        }
+      }
+
+    //          return mergeDeep(target, ...sources);
+      return mergeDeep.apply(null, [target].concat(sources));
+    }
+    //cf. https://stackoverflow.com/a/34749873/7316365
+    
     var fetchJSON = function(path, data, options){
-        data = Object.assign({}, fetchJSON.defaults.qs, data || {});
+//        data = Object.assign({}, fetchJSON.defaults.qs, data || {});
+        data = mergeDeep({}, fetchJSON.defaults.qs, data || {});
         options = options || {};
         
         if(typeof data != "object" || data === null)
@@ -65,24 +111,13 @@
         
         return new Promise(function(resolve, reject){
             if(typeof path == "string"){
-//                console.log("url: ", path+qstring);
-                var fetchOptions = Object.assign({}, fetchJSON.defaults.options, options, {method: "GET"});
-                fetchOptions.headers = Object.assign({}, fetchJSON.defaults.headers, fetchOptions.headers || {});
+//                var fetchOptions = Object.assign({}, fetchJSON.defaults.options, options, {method: "GET"});
+//                fetchOptions.headers = Object.assign({}, fetchJSON.defaults.headers, fetchOptions.headers || {});
+                var fetchOptions = mergeDeep({}, fetchJSON.defaults.options, options, {method: "GET"});
+                fetchOptions.headers = mergeDeep({}, fetchJSON.defaults.headers, fetchOptions.headers || {});
                 var f = fetch(path + qstring, fetchOptions);
 
                 f.then(function(response){
-//                    var contentType= response.headers.get("content-type");
-//
-//                    if(contentType && contentType.includes("application/json"))
-//                        return response.json().then(jsonData=>{
-//                            if(typeof functor == "function")
-//                                functor(jsonData);
-//                            resolve(jsonData);
-//                        });
-//                    else{
-//                        reject("Something went wrong during data inspection (data is not JSON or couldn't reach file)");
-//                        return null;
-//                    }
                     return response.json()
                     .then(resolve)
                     .catch(function(){
